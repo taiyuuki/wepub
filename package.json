@@ -1,6 +1,6 @@
 {
   "name": "wepub",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A javascript library for creating EPUB 2 document.",
   "main": "./dist/cjs/index.js",
   "module": "./dist/esm/index.js",

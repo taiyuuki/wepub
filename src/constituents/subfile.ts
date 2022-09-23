@@ -51,15 +51,14 @@ const getFilesForEPUB = (epub: Epub): SubFiLe[] => {
   });
 
   // sections
-  for (let i = 1; i <= epub.sections.length; i += 1) {
-    const fname = epub.sections[i - 1].overrideFilename;
+  epub.sections.forEach((section) => {
     files.push({
-      name: `${fname}`,
+      name: section.overrideFilename,
       folder: "OEBPF/content",
       compress: true,
-      content: markupFiles.getSection(epub, i),
+      content: markupFiles.getSection(epub, section),
     });
-  }
+  });
 
   // toc
   if (epub.showContents) {

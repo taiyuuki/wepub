@@ -5,8 +5,8 @@ Wepub is a javascript library for creating EPUB 2 document.
 Wepub can be thought as a fork of [Nodepub](https://github.com/kcartlidge/nodepub)，but:
 
 * Compatible with both browser and node.
-  * In node, build EPUB with [archiver]([archiverjs/node-archiver: a streaming interface for archive generation (github.com)](https://github.com/archiverjs/node-archiver)).
-  * In browser, build EPUB with [JSZip]([Stuk/jszip: Create, read and edit .zip files with Javascript (github.com)](https://github.com/Stuk/jszip)).
+  * In node, build EPUB with [archiver](https://github.com/archiverjs/node-archiver).
+  * In browser, build EPUB with [JSZip](https://github.com/Stuk/jszip).
 * Api has been transformed to be more flexible (At least for me).
 * Using typescript.
 
@@ -32,10 +32,10 @@ The following is the same as [Nodepub](https://github.com/kcartlidge/nodepub):
 CDN:
 
 ```html
-<script src="https://cdn.jsdelivr.net/npm/wepub@1.0.0/dist/umd/index.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/wepub@1.0.1/dist/umd/index.js"></script>
 ```
 
-You can also download it and import via local file. 
+You can also [download](https://github.com/taiyuuki/wepub/blob/main/dist/umd/index.js) it and import via local file. 
 
 Add `script` tag in browser and use the global variable `Wepub` to create EPUB document:
 
@@ -73,6 +73,14 @@ const epub = new Wepub(metadata);
 ```js
 const epub = new Wepub();
 epub.setMeta(metadata);
+```
+
+### runtime
+
+There is a property used to get the runtime. 
+
+```js
+console.log(epub.runtime) // 'browser' or 'node'
 ```
 
 ## Metadata
@@ -198,7 +206,8 @@ epub.addSection({
 });
 ```
 
-> In Nodeup, addSection has 5 arguments, I changed it to one argument as an object. The advantage is that, except for the required properties, rest of the properties can be used flexibly.
+> * In Nodeup, addSection has 5 arguments, I changed it to one argument as an object. The advantage is that, except for the required properties, rest of the properties can be used flexibly.
+> * If some sections have overrideFilename and others don't, the default numbers (s1, s2, s3...) may be discontinuous, but no link breaks like Nodepub ( I fixed this in version 1.0.1). 
 
 ## Adding CSS
 
@@ -208,7 +217,7 @@ You can inject CSS into your book.
 epub.addCss("p { text-indent: 0; } p+p { text-indent: 0.75em; }");
 ```
 
-### Custom Table of Contents
+## Custom Table of Contents
 
 There is a default table of contents added into all generated EPUBs. In addition to suppressing it, you can also create it yourself.
 

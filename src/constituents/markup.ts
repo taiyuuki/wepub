@@ -1,4 +1,5 @@
 import type Epub from "src/dts";
+import { Section } from "src/dts";
 import { getImageFileName } from "src/utility";
 import { replacements } from "./replacements";
 
@@ -21,13 +22,11 @@ const markup = {
     } else {
       result += "    <div class='contents'>\n";
       result += "      <h1>[[CONTENTS]]</h1>\n";
-      for (let i = 1; i <= epub.sections.length; i += 1) {
-        const section = epub.sections[i - 1];
+      epub.sections.forEach((section) => {
         if (!section.excludeFromContents) {
-          const { title } = section;
-          result += `      <a href='s${i}.xhtml'>${title}</a><br/>\n`;
+          result += `      <a href='${section.overrideFilename}'>${section.title}</a><br/>\n`;
         }
-      }
+      });
       result += "    </div>\n";
     }
     result += "  </body>\n";
@@ -75,8 +74,7 @@ const markup = {
   getCss: (epub: Epub) => replacements(epub, replacements(epub, epub.css)),
 
   // section
-  getSection: (epub: Epub, sectionNumber: number) => {
-    const section = epub.sections[sectionNumber - 1];
+  getSection: (epub: Epub, section: Section) => {
     const { title } = section;
     const { content } = section;
 

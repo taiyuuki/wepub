@@ -14,7 +14,7 @@ describe("metadata", () => {
   });
 
   const epub = new Epub({
-    title: "测试",
+    title: "test",
     id: 1001,
     cover: "C:/A/B/C.jpg",
     author: "wepub",
@@ -31,14 +31,14 @@ describe("metadata", () => {
         "author": "wepub",
         "cover": "C:/A/B/C.jpg",
         "id": 1001,
-        "title": "测试",
+        "title": "test",
       }
     `);
   });
 
   it("set metadatea", () => {
     epub.setMeta({
-      title: "测试2",
+      title: "test2",
       id: 2002,
       cover: {
         name: "D:/images/123.png",
@@ -60,7 +60,7 @@ describe("metadata", () => {
           "name": "D:/images/123.png",
         },
         "id": 2002,
-        "title": "测试2",
+        "title": "test2",
       }
     `);
   });
