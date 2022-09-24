@@ -1,8 +1,16 @@
 import Epub from "../src/index";
 import { describe, it, expect } from "vitest";
-import { getImageFileName } from "src/utility";
+import { genUuid, getImageFileName } from "src/utility";
 
 describe("metadata", () => {
+  it("generate uuid", () => {
+    expect(
+      /[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}/.test(
+        genUuid()
+      )
+    ).toMatchInlineSnapshot('true');
+  });
+
   it("get image name", () => {
     const image1 = "C:/images/cover.jpg";
     const image2 = {

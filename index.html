@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>example.epub</title>
+    <script src="./dist/umd/index.js"></script>
+    <style>
+      .container {
+        width: 300px;
+        margin: 100px auto;
+      }
+      #cover {
+        display: block;
+        box-shadow: 0 0 1px #000;
+        width: 300px;
+        height: 400px;
+        overflow: hidden;
+        text-align: center;
+        cursor: pointer;
+      }
+      #cover::before {
+        content: "";
+        display: inline-block;
+        height: 100%;
+        vertical-align: middle;
+      }
+      #cover img {
+        width: 100%;
+        display: inline-block;
+        vertical-align: middle;
+      }
+      #btn {
+        display: none;
+      }
+      .options {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin: 10px;
+      }
+      #generate {
+        box-shadow: 0 0 1px #000;
+        border-radius: 5px;
+        width: fit-content;
+        padding: 5px;
+        margin: 10px auto;
+        display: none;
+      }
+      #generate:hover {
+        opacity: 0.7;
+      }
+      #btn {
+        display: none;
+      }
+      #gen {
+        display: none;
+      }
+      [disabled] {
+        display: none;
+      }
+      #progress {
+        width: fit-content;
+        margin: auto;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <label id="cover" for="btn">Set Cover</label>
+      <input type="file" name="" id="btn" />
+      <div class="options">
+        <label for="gen" id="generate">
+          Generate Epub
+          <button id="gen" disabled="false" />
+        </label>
+      </div>
+      <div id="progress"></div>
+    </div>
+  </body>
+  <script>
+    var epub = new Wepub();
+    var meta = {
+      id: epub.genUuid(),
+      cover: {
+        name: "cover.jpg",
+      },
+      title: "Unnamed Document",
+      series: "My Series",
+      sequence: 1,
+      author: "Anonymous",
+      fileAs: "Anonymous",
+      genre: "Non-Fiction",
+      tags: "Sample,Example,Test",
+      copyright: "Anonymous, 1980",
+      publisher: "My Fake Publisher",
+      published: "2000-12-31",
+      language: "en",
+      description: "A test book.",
+      contents: "Contents",
+      showContents: true,
+      source: "http://www.kcartlidge.com",
+    };
+    var copyright = `<h1>[[TITLE]]</h1>
+<h2>[[AUTHOR]]</h2>
+<h3>&copy; [[COPYRIGHT]]</h3>
+<p>
+  All rights reserved.
+</p>
+<p>
+  No part of this book may be reproduced in any form or by any electronic or
+  mechanical means, including information storage and retrieval systems, without
+  written permission from the author, except where covered by fair usage or
+  equivalent.
+</p>
+<p>
+  This book is a work of fiction.
+  Any resemblance to actual persons  (living or dead) is entirely coincidental.
+</p>
+`;
+    var about = `<h1>About the Author</h1>
+<p>
+  This is just some random blurb about the author.
+</p>
+<p>
+  You can find more at the author's site.
+</p>
+<p>
+  Oh, and here's a picture:
+</p>
+<p>
+  <img src="../images/cover.jpg" alt="cover." />
+</p>
+`;
+    var titlePage =
+      "<div id='title'><h1>[[TITLE]]</h1><h2>Book <strong>[[SEQUENCE]]</strong> of <em>[[SERIES]]</em></h2><h3>[[AUTHOR]]</h3><p> &nbsp;</p><p>&copy; [[COPYRIGHT]]</p></div>";
+    var lipsum =
+      "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse mattis iaculis pharetra. Proin malesuada tortor ut nibh viverra eleifend.</p><p>Duis efficitur, arcu vitae viverra consectetur, nisi mi pharetra metus, vel egestas ex velit id leo. Curabitur non tortor nisi. Mauris ornare, tellus vel fermentum suscipit, ligula est eleifend dui, in elementum nunc risus in ipsum. Pellentesque finibus aliquet turpis sed scelerisque. Pellentesque gravida semper elit, ut consequat est mollis sit amet. Nulla facilisi.</p>";
+    epub.addSection({
+      title: "Title Page",
+      content: titlePage,
+      isFrontMatter: true,
+      overrideFilename: "Title Page",
+    });
+    epub.addSection({
+      title: "copyright",
+      content: copyright,
+      isFrontMatter: true,
+      overrideFilename: "copyright",
+    });
+    epub.addSection({
+      title: "Chapter 1",
+      content: `<h1>One</h1>${lipsum}<p><a href='chapter2.xhtml'>A test internal link</a>.</p>`,
+      overrideFilename: "chapter1",
+    });
+    epub.addSection({
+      title: "Chapter 2",
+      content: `<h1>Two</h1>${lipsum}`,
+      overrideFilename: "chapter2",
+    });
+    epub.addSection({
+      title: "About the author",
+      content: about,
+      overrideFilename: "About the author",
+    });
+    epub.addCss("img{width:100%}");
+    var btn = document.querySelector("#btn");
+    var cover = document.querySelector("#cover");
+    var generate = document.querySelector("#generate");
+    var genBtn = document.querySelector("#gen");
+    var oProgress = document.querySelector("#progress");
+    btn.addEventListener("change", (e) => {
+      cover.innerHTML = "";
+      var coverImg = e.target.files[0];
+      meta.cover.data = coverImg;
+      epub.setMeta(meta);
+      var url = URL.createObjectURL(coverImg);
+      var img = new Image();
+      img.src = url;
+      cover.appendChild(img);
+      genBtn.removeAttribute("disabled");
+      generate.setAttribute("style", "display:block");
+    });
+    genBtn.addEventListener("click", async () => {
+      await epub.build("example", (p) => {
+        oProgress.textContent = Math.floor(p) + "%";
+      });
+      oProgress.textContent = "complete!";
+    });
+  </script>
+</html>

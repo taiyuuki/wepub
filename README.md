@@ -1,4 +1,8 @@
-# wepub
+# Wepub
+
+[TOC]
+
+## About
 
 Wepub is a javascript library for creating EPUB 2 document.
 
@@ -28,6 +32,8 @@ The following is the same as [Nodepub](https://github.com/kcartlidge/nodepub):
 ## Creating EPUB
 
 ### Import in Browser 
+
+[example](https://taiyuuki.github.io/wepub)
 
 CDN:
 
@@ -206,7 +212,7 @@ epub.addSection({
 });
 ```
 
-> * In Nodeup, addSection has 5 arguments, I changed it to one argument as an object. The advantage is that, except for the required properties, rest of the properties can be used flexibly.
+> * In Nodepub, addSection has 5 arguments, I changed it to one argument as an object. The advantage is that, except for the required properties, rest of the properties can be used flexibly.
 > * If some sections have overrideFilename and others don't, the default numbers (s1, s2, s3...) may be discontinuous, but no link breaks like Nodepub ( I fixed this in version 1.0.1). 
 
 ## Adding CSS

@@ -97,7 +97,7 @@ describe("sections", () => {
           <dc:coverage></dc:coverage>
           <dc:source>undefined</dc:source>
           <dc:date opf:event='publication'>undefined</dc:date>
-          <dc:date opf:event='modification'>2022-09-23</dc:date>
+          <dc:date opf:event='modification'>2022-09-24</dc:date>
           <dc:rights>undefined</dc:rights>
           <meta name='cover' content='cover-image'/>
         </metadata>

@@ -50,9 +50,9 @@ function getRandom(digit: number) {
 }
 export const genUuid = (): string => {
   let uuid = "";
-  if (URL && Blob) {
+  if (typeof Blob !== "undefined") {
     const url_uuid = URL.createObjectURL(new Blob());
-    uuid = url_uuid.toString().substring(uuid.lastIndexOf("/") + 1);
+    uuid = url_uuid.toString().substring(url_uuid.lastIndexOf("/") + 1);
     URL.revokeObjectURL(url_uuid);
   } else {
     uuid = `${getRandom(8)}-${getRandom(4)}-${getRandom(4)}-${getRandom(
