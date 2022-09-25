@@ -1,20 +1,22 @@
 declare class Epub {
   constructor(metadata?: Metadata, generateContentsCallback?: ContentsGenerate);
-  generateContentsCallback: ContentsGenerate | undefined;
   metadata: Metadata;
   coverImage: EpubImage;
-  css: string;
   filesForTOC: TOC[];
+  customFile: CustomFile[];
   showContents: boolean;
   sections: Section[];
+  css: string;
   images: EpubImage[];
   runtime: string;
+  _generateContentsCallback: ContentsGenerate | undefined;
 
   setMeta(metadata: Metadata): void;
   setContents(generateContentsCallback: ContentsGenerate): void;
   addCover(cover: EpubImage): void;
   addSection(section: Section): void;
   addSectionsAll(sections: Section[]): void;
+  addCustomFile(subFile: CustomFile): void;
   getSectionsCount(): number;
   addCss(css: string): void;
   addImage(image: EpubImage): void;
@@ -79,8 +81,10 @@ export interface TOC {
 export interface SubFiLe {
   name: string;
   folder: string;
-  compress: boolean;
+  compress?: boolean;
   content: FileDate;
 }
+
+export interface CustomFile extends SubFiLe {}
 
 export { Epub as default };

@@ -1,57 +1,38 @@
-import Epub from "../src/index";
 import { describe, it, expect } from "vitest";
+import structuralFiles from "../src/constituents/structural";
+import Epub from "../src/index";
 import { getFilesForEPUB } from "../src/constituents/subfile";
 
-describe("sections", () => {
+describe("sub file", () => {
   const epub = new Epub({
     title: "test",
     id: 1001,
     cover: "C:/A/B/C.jpg",
     author: "wepub",
   });
-  epub.addSection({
-    title: "prologue",
-    content: "<h1>prologue</h1><p>...</p>",
-    isFrontMatter: true,
-    overrideFilename: "prologue",
+  epub.addCustomFile({
+    name: "duokan-extension.xml",
+    folder: "META-INF",
+    compress: true,
+    content: structuralFiles.getDuokanExtension(),
   });
-  epub.addSection({
-    title: "Chapter One",
-    content: "<h1>Chapter One</h1><p>...</p>",
-    overrideFilename: "chapter-01",
-  });
-  epub.addSection({
-    title: "Chapter Two",
-    content: "<h1>Chapter Two</h1><p>...</p>",
-  });
-  it("add sections", () => {
-    expect(epub.sections).toMatchInlineSnapshot(`
-      [
-        {
-          "content": "<h1>prologue</h1><p>...</p>",
-          "excludeFromContents": false,
-          "isFrontMatter": true,
-          "overrideFilename": "prologue.xhtml",
-          "title": "prologue",
-        },
-        {
-          "content": "<h1>Chapter One</h1><p>...</p>",
-          "excludeFromContents": false,
-          "isFrontMatter": false,
-          "overrideFilename": "chapter-01.xhtml",
-          "title": "Chapter One",
-        },
-        {
-          "content": "<h1>Chapter Two</h1><p>...</p>",
-          "excludeFromContents": false,
-          "isFrontMatter": false,
-          "overrideFilename": "s3.xhtml",
-          "title": "Chapter Two",
-        },
-      ]
-    `);
+  it("add sub file", () => {
     expect(getFilesForEPUB(epub)).toMatchInlineSnapshot(`
       [
+        {
+          "compress": true,
+          "content": "<?xml version=\\"1.0\\" encoding=\\"UTF-8\\"?>
+      <duokan-extension version=\\"2.4.0\\">
+        <display-options layout=\\"vertical-comic\\"/>
+        <writing-options>
+          <option name=\\"writing-mode\\">horizontal-tb</option>
+          <option name=\\"direction\\">ltr</option>
+        </writing-options>
+      </duokan-extension>
+      ",
+          "folder": "META-INF",
+          "name": "duokan-extension.xml",
+        },
         {
           "compress": false,
           "content": "application/epub+zip",
@@ -91,18 +72,12 @@ describe("sections", () => {
           <item id='cover-image' media-type='image/jpeg' href='images/C.jpg'/>
           <item id='cover' media-type='application/xhtml+xml' href='cover.xhtml'/>
           <item id='navigation' media-type='application/x-dtbncx+xml' href='navigation.ncx'/>
-          <item id='s1' media-type='application/xhtml+xml' href='content/prologue.xhtml'/>
-          <item id='s2' media-type='application/xhtml+xml' href='content/chapter-01.xhtml'/>
-          <item id='s3' media-type='application/xhtml+xml' href='content/s3.xhtml'/>
           <item id='toc' media-type='application/xhtml+xml' href='content/toc.xhtml'/>
           <item id='css' media-type='text/css' href='css/ebook.css'/>
         </manifest>
         <spine toc='navigation'>
           <itemref idref='cover' linear='yes' properties='duokan-page-fullscreen'/>
-          <itemref idref='s1' />
           <itemref idref='toc'/>
-          <itemref idref='s2' />
-          <itemref idref='s3' />
         </spine>
         <guide>
           <reference type='toc' title='Contents' href='content/toc.xhtml'></reference>
@@ -130,21 +105,9 @@ describe("sections", () => {
           <navLabel><text>Cover</text></navLabel>
           <content src='cover.xhtml'/>
         </navPoint>
-        <navPoint class='section' id='s1' playOrder='2'>
-          <navLabel><text>prologue</text></navLabel>
-          <content src='content/prologue.xhtml'/>
-        </navPoint>
-        <navPoint class='toc' id='toc' playOrder='3'>
+        <navPoint class='toc' id='toc' playOrder='2'>
           <navLabel><text></text></navLabel>
           <content src='content/toc.xhtml'/>
-        </navPoint>
-        <navPoint class='section' id='s2' playOrder='4'>
-          <navLabel><text>Chapter One</text></navLabel>
-          <content src='content/chapter-01.xhtml'/>
-        </navPoint>
-        <navPoint class='section' id='s3' playOrder='5'>
-          <navLabel><text>Chapter Two</text></navLabel>
-          <content src='content/s3.xhtml'/>
         </navPoint>
       </navMap>
       </ncx>
@@ -182,63 +145,6 @@ describe("sections", () => {
         {
           "compress": true,
           "content": "<?xml version='1.0' encoding='utf-8'?>
-      <!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.1//EN' 'http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd'>
-      <html xmlns='http://www.w3.org/1999/xhtml'>
-        <head>
-          <title>prologue</title>
-          <link rel='stylesheet' type='text/css' href='../css/ebook.css' />
-        </head>
-        <body>
-          <div>
-            <h1>prologue</h1><p>...</p>
-          </div>
-        </body>
-      </html>
-      ",
-          "folder": "OEBPF/content",
-          "name": "prologue.xhtml",
-        },
-        {
-          "compress": true,
-          "content": "<?xml version='1.0' encoding='utf-8'?>
-      <!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.1//EN' 'http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd'>
-      <html xmlns='http://www.w3.org/1999/xhtml'>
-        <head>
-          <title>Chapter One</title>
-          <link rel='stylesheet' type='text/css' href='../css/ebook.css' />
-        </head>
-        <body>
-          <div>
-            <h1>Chapter One</h1><p>...</p>
-          </div>
-        </body>
-      </html>
-      ",
-          "folder": "OEBPF/content",
-          "name": "chapter-01.xhtml",
-        },
-        {
-          "compress": true,
-          "content": "<?xml version='1.0' encoding='utf-8'?>
-      <!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.1//EN' 'http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd'>
-      <html xmlns='http://www.w3.org/1999/xhtml'>
-        <head>
-          <title>Chapter Two</title>
-          <link rel='stylesheet' type='text/css' href='../css/ebook.css' />
-        </head>
-        <body>
-          <div>
-            <h1>Chapter Two</h1><p>...</p>
-          </div>
-        </body>
-      </html>
-      ",
-          "folder": "OEBPF/content",
-          "name": "s3.xhtml",
-        },
-        {
-          "compress": true,
-          "content": "<?xml version='1.0' encoding='utf-8'?>
       <!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.1//EN' 'http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd' >
       <html xmlns='http://www.w3.org/1999/xhtml'>
         <head>
@@ -248,9 +154,6 @@ describe("sections", () => {
         <body>
           <div class='contents'>
             <h1></h1>
-            <a href='prologue.xhtml'>prologue</a><br/>
-            <a href='chapter-01.xhtml'>Chapter One</a><br/>
-            <a href='s3.xhtml'>Chapter Two</a><br/>
           </div>
         </body>
       </html>

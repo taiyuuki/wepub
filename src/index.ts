@@ -14,6 +14,7 @@ import type {
   ContentsGenerate,
   ImagePath,
   OnProgress,
+  CustomFile,
 } from "./dts";
 import { getFilesForEPUB } from "./constituents/subfile";
 import fs, { promises as fsPromises } from "fs";
@@ -21,14 +22,15 @@ import archiver from "archiver";
 
 export default class Wepub {
   metadata: Metadata;
-  generateContentsCallback: ContentsGenerate | undefined;
   coverImage: EpubImage;
   showContents: boolean;
   sections: Section[];
   css: string;
   filesForTOC: TOC[];
+  customFile: CustomFile[];
   images: EpubImage[];
   runtime: string;
+  _generateContentsCallback: ContentsGenerate | undefined;
   constructor(metadata?: Metadata) {
     this.metadata = {} as Metadata;
     this.coverImage = {} as ImageFile;
@@ -36,6 +38,7 @@ export default class Wepub {
     this.sections = [];
     this.css = "";
     this.filesForTOC = [];
+    this.customFile = [];
     this.images = [];
     this.runtime = "node";
     if (metadata) {
@@ -87,7 +90,7 @@ export default class Wepub {
   }
 
   setContents(generateContentsCallback: ContentsGenerate) {
-    this.generateContentsCallback = generateContentsCallback;
+    this._generateContentsCallback = generateContentsCallback;
   }
 
   addImage(image: ImagePath) {
@@ -133,6 +136,10 @@ export default class Wepub {
     sections.forEach((section) => {
       this.addSection(section);
     });
+  }
+
+  addCustomFile(customFile: CustomFile) {
+    this.customFile.push(customFile);
   }
 
   getSectionsCount() {

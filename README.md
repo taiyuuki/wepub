@@ -1,6 +1,6 @@
 # Wepub
 
-## Contnets
+## Contents
 
 - [About](#About)
 - [Creating EPUB](#Creating-EPUB)
@@ -9,9 +9,10 @@
   - [runtime](#runtime)
 - [Metadata](#Metadata)
   - [Example Metadata](#Example-Metadata)
-- [Adding images](#Adding-images)
-- [Adding sections](#Adding-sections)
+- [Adding Images](#Adding-Images)
+- [Adding Sections](#Adding-Sections)
 - [Adding CSS](#Adding-CSS)
+- [Adding Custom File](#Adding-Custom-File)
 - [Custom Table of Contents](#Custom-Table-of-Contents)
 - [Generating EPUB](#Generating-EPUB)
 - [License](#License)
@@ -25,13 +26,14 @@ Wepub can be thought as a fork of [Nodepub](https://github.com/kcartlidge/nodepu
 * Compatible with both browser and node.
   * In node, build EPUB with [archiver](https://github.com/archiverjs/node-archiver).
   * In browser, build EPUB with [JSZip](https://github.com/Stuk/jszip).
+* Adding customization files (such as font).
 * Api has been transformed to be more flexible (At least for me).
 * Using typescript.
 
 The following is the same as [Nodepub](https://github.com/kcartlidge/nodepub):
 
 - Files pass the [IDPF online validator](http://validator.idpf.org/)
-- Files meet Sigil's preflight checks
+- Files meet Sigil"s preflight checks
 - Files open fine in iBooks, Adobe Digital Editions, and Calibre
 - Files open fine with the Kobo H20 ereader
 - Files are fine as *KindleGen* input
@@ -41,7 +43,7 @@ The following is the same as [Nodepub](https://github.com/kcartlidge/nodepub):
 - Optionally generate your own contents page
 - Front matter before the contents page
 - Exclude sections from auto contents page and metadata-based navigation
-- OEBPS and other 'expected' subfolders within the EPUB
+- OEBPS and other "expected" subfolders within the EPUB
 
 ## Creating EPUB
 
@@ -52,7 +54,7 @@ The following is the same as [Nodepub](https://github.com/kcartlidge/nodepub):
 CDN:
 
 ```html
-<script src="https://cdn.jsdelivr.net/npm/wepub@1.0.4/dist/umd/index.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/wepub@1.0.5/dist/umd/index.js"></script>
 ```
 
 You can also [download](https://github.com/taiyuuki/wepub/blob/main/dist/umd/index.js) it and import via local file. 
@@ -81,7 +83,7 @@ npm i wepub
 Import and create EPUB document:
 
 ```js
-import Wepub from 'wepub';
+import Wepub from "wepub";
 ```
 
 ```js
@@ -100,7 +102,7 @@ epub.setMeta(metadata);
 There is a property used to get the runtime. 
 
 ```js
-console.log(epub.runtime) // 'browser' or 'node'
+console.log(epub.runtime) // "browser" or "node"
 ```
 
 ## Metadata
@@ -136,8 +138,8 @@ var metadata = {
     source: "http://www.kcartlidge.com",
     // in browser
     images: [
-        { name:'1.jpg', data: "Blob/File or base64 DataURI" },
-        { name: '2.jpg', data: "Blob/File or base64 DataURI" }
+        { name:"1.jpg", data: "Blob/File or base64 DataURI" },
+        { name: "2.jpg", data: "Blob/File or base64 DataURI" }
     ]
     // in nodejs
     images: ["D:/epub/images/1.jpg","D:/epub/images/2.jpg"]
@@ -165,7 +167,7 @@ var metadata = {
 - `language` is the short *ISO* language name (`en`, `fr`, `de` etc)
 - `showContents` (default is `true`) lets you suppress the contents pageAdding images
 
-## Adding images
+## Adding Images
 
 In addition to add images in the metadata , you can also:
 
@@ -183,7 +185,7 @@ In addition to add images in the metadata , you can also:
 
 The image here is the same as in the metadata. 
 
-## Adding sections
+## Adding Sections
 
 Sections are chunks of HTML that can be thought of as chapters.
 
@@ -213,21 +215,21 @@ For example:
 
 ```js
 epub.addSection({
-    title: 'prologue',
-    content: '<h1>prologue</h1><p>...</p>',
+    title: "prologue",
+    content: "<h1>prologue</h1><p>...</p>",
     excludeFromContents: true,
     isFrontMatter: true,
-    overrideFilename: 'prologue'
+    overrideFilename: "prologue"
 })
 epub.addSection({
-    title: 'Chapter One',
-    content: '<h1>Chapter One</h1><p>...</p>',
-    overrideFilename: 'chapter-01'
+    title: "Chapter One",
+    content: "<h1>Chapter One</h1><p>...</p>",
+    overrideFilename: "chapter-01"
 });
 ```
 
 > * In Nodepub, addSection has 5 arguments, I changed it to one argument as an object. The advantage is that, except for the required properties, rest of the properties can be used flexibly.
-> * If some sections have overrideFilename and others don't, the default numbers (s1, s2, s3...) may be discontinuous, but no link breaks like Nodepub ( I fixed this in version 1.0.1). 
+> * If some sections has overrideFilename and others don"t, the default numbers (s1, s2, s3...) may be discontinuous, but no link breaks like Nodepub ( I fixed this in version 1.0.1). 
 
 ## Adding CSS
 
@@ -236,6 +238,71 @@ You can inject CSS into your book.
 ```js
 epub.addCss("p { text-indent: 0; } p+p { text-indent: 0.75em; }");
 ```
+
+## Adding Custom File
+
+If you want to add some customization files:
+
+```js
+epub.addCustomFile(customFile);
+```
+
+customFile is an object that has the following properties:
+
+| properties |                        type                         |          description          | required | default |
+| :--------: | :-------------------------------------------------: | :---------------------------: | :------: | :-----: |
+|    name    |                       string                        |           File name           |    √     |         |
+|   folder   |                       string                        | Folder where the file in EPUB |    √     |         |
+|  content   | string \| Blob(browser only) \| Buffer(nodejs only) |         File content          |    √     |         |
+|  compress  |                       boolean                       |      Whether to compress      |          |  true   |
+
+For example, adding "extension.xml" in "META-INF" folder :
+
+```js
+function getExtension() {
+    let result = "";
+    result += "<?xml version="1.0" encoding="UTF-8"?>\n";
+    result += "<extension version="2.4.0">\n";
+    result += "  <display-options layout="vertical-comic"/>\n";
+    result += "  <writing-options>\n";
+    result += "    <option name="writing-mode">horizontal-tb</option>\n";
+    result += "    <option name="direction">ltr</option>\n";
+    result += "  </writing-options>\n";
+    result += "</extension>\n";
+    return result;
+  }
+var customFile = {
+    name: "extension.xml",
+    folder: "META-INF",
+    content: getExtension()
+}
+epub.addCustomFile(customFile);
+```
+
+EPUB default directory structure:
+
+> META-INF
+>
+> OEBPF
+>
+> > content
+> >
+> > css
+> >
+> > images
+
+* If you want to create a new folder,  do it in OEBPF. For example, adding a font:
+
+  ```js
+  var font = {
+      name: "ebook.ttf",
+      folder: "OEBPF/Font",
+      content: fontBolb
+  }
+  epub.addCustomFile(font);
+  ```
+
+* WARNING: Do not add files other than image in images folder.
 
 ## Custom Table of Contents
 
@@ -260,7 +327,7 @@ var function generateContents(links){
     var contents = "<h1>Contents</h1>";
     links.forEach((link) => {
         if (link.itemType !== "contents") {
-            contents += "<a href='" + link.link + "'>" + link.title + "</a><br />";
+            contents += "<a href="" + link.link + "">" + link.title + "</a><br />";
         }
     });
     return contents;
@@ -287,19 +354,19 @@ In browser, just the filename:
 
 ```js
 // This will start downloading `example.epub` inside the browser.
-await epub.build('example.epub')
+await epub.build("example.epub")
 ```
 
 In Nodejs, filename with path:
 
 ```js
-await epub.build('D:/epub/example.epub')
+await epub.build("D:/epub/example.epub")
 ```
 
 The onProgress is a callback function for get progress while generating.
 
 ```js
-await epub.build('example.epub',function(progress){
+await epub.build("example.epub",function(progress){
     // progress range: [0, 100].
     console.log(progress);
 })

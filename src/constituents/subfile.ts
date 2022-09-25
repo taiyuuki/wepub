@@ -6,6 +6,16 @@ import { getImageFileName } from "src/utility";
 
 const getFilesForEPUB = (epub: Epub): SubFiLe[] => {
   const files = [];
+  if (epub.customFile.length > 0) {
+    epub.customFile.forEach((subFile) => {
+      files.push({
+        name: subFile.name,
+        folder: subFile.folder,
+        compress: subFile.compress ?? true,
+        content: subFile.content,
+      });
+    });
+  }
   files.push({
     name: "mimetype",
     folder: "",
@@ -18,12 +28,6 @@ const getFilesForEPUB = (epub: Epub): SubFiLe[] => {
     compress: true,
     content: structuralFiles.getContainer(),
   });
-  // files.push({
-  //   name: "duokan-extension.xml",
-  //   folder: "META-INF",
-  //   compress: true,
-  //   content: structuralFiles.getDuokanExtension(),
-  // });
   files.push({
     name: "ebook.opf",
     folder: "OEBPF",

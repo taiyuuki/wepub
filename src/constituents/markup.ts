@@ -37,8 +37,8 @@ const markup = {
   // TOC
   getTOC: (epub: Epub) => {
     let content = "";
-    if (epub.generateContentsCallback) {
-      const callbackContent = epub.generateContentsCallback(epub.filesForTOC);
+    if (epub._generateContentsCallback) {
+      const callbackContent = epub._generateContentsCallback(epub.filesForTOC);
       content = markup.getContents(epub, callbackContent);
     } else {
       content = markup.getContents(epub);
