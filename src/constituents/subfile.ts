@@ -18,12 +18,12 @@ const getFilesForEPUB = (epub: Epub): SubFiLe[] => {
     compress: true,
     content: structuralFiles.getContainer(),
   });
-  files.push({
-    name: "duokan-extension.xml",
-    folder: "META-INF",
-    compress: true,
-    content: structuralFiles.getDuokanExtension(),
-  });
+  // files.push({
+  //   name: "duokan-extension.xml",
+  //   folder: "META-INF",
+  //   compress: true,
+  //   content: structuralFiles.getDuokanExtension(),
+  // });
   files.push({
     name: "ebook.opf",
     folder: "OEBPF",
