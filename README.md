@@ -52,7 +52,7 @@ The following is the same as [Nodepub](https://github.com/kcartlidge/nodepub):
 CDN:
 
 ```html
-<script src="https://cdn.jsdelivr.net/npm/wepub@1.0.3/dist/umd/index.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/wepub@1.0.4/dist/umd/index.js"></script>
 ```
 
 You can also [download](https://github.com/taiyuuki/wepub/blob/main/dist/umd/index.js) it and import via local file. 
