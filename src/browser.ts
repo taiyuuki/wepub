@@ -87,9 +87,7 @@ export default class Wepub {
 
   setMeta(metadata: Metadata) {
     Object.assign(this.metadata, metadata);
-    if (metadata.showContents) {
-      this.showContents = metadata.showContents;
-    }
+    this.showContents = metadata.showContents ?? true;
     if (metadata.cover) {
       this.addCover(metadata.cover);
     }
