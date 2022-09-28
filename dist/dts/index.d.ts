@@ -36,7 +36,7 @@ type ImageFile = {
   data: FileDate;
 };
 
-type ImagePath = string;
+type ImagePath = string | { name: string; path: string };
 
 type EpubImage = ImageFile | ImagePath;
 

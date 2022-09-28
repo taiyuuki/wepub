@@ -9,7 +9,10 @@
   - [runtime](#runtime)
 - [Metadata](#Metadata)
   - [Example Metadata](#Example-Metadata)
+  - [Text Substitutions](#Text-Substitutions)
 - [Adding Images](#Adding-Images)
+  - [In Browser](#In-Browser)
+  - [In Nodejs](#In-Nodejs)
 - [Adding Sections](#Adding-Sections)
 - [Adding CSS](#Adding-CSS)
 - [Adding Custom File](#Adding-Custom-File)
@@ -54,7 +57,7 @@ The following is the same as [Nodepub](https://github.com/kcartlidge/nodepub):
 CDN:
 
 ```html
-<script src="https://cdn.jsdelivr.net/npm/wepub@1.0.9/dist/umd/index.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/wepub@1.0.10/dist/umd/index.js"></script>
 ```
 
 You can also [download](https://github.com/taiyuuki/wepub/blob/main/dist/umd/index.js) it and import via local file. 
@@ -154,11 +157,7 @@ var metadata = {
   metadata.id = epub.genUuid();
   ```
 
-- `cover` and `image` 
-  - In browser, image should be an object that has two properties:
-    - `name`: file name with extension.
-    - `data`: *Blob/File* or *base64 DataURI*.
-  - In nodejs, image should be *file path* of the image. `D:/epub/images/cover.jpg`
+- `cover` and `image`, see [Adding Images](#Adding-Images).
 - `series` and `sequence` are not recognised by many readers (it sets the properties used by *Calibre*)
 - `fileAs` is the sortable version of the `author`, which is usually by last name
 - `genre` becomes the main subject in the final EPUB
@@ -166,6 +165,26 @@ var metadata = {
 - `published` is the data published - note the *year-month-day* format
 - `language` is the short *ISO* language name (`en`, `fr`, `de` etc)
 - `showContents` (default is `true`) lets you suppress the contents pageAdding images
+
+### Text Substitutions
+
+A simple form of text substitution is supported. At any point in your content you may include placeholders like `[[COPYRIGHT]]`. When the EPUB is generated any such placeholders which match the *capitalised* name of a *metadata* entry are replaced with the corresponding metadata value.
+
+For example, you could have a *"Thanks for Reading"* page at the end of your book which has the following content:
+
+```
+<p>Thanks for reading <strong>[[TITLE]]</strong> by <em>[[AUTHOR]]</em>.</p>
+```
+
+When the EPUB is produced if your metadata sets a `title:` of *"The Hobbit"* and an `author:` of *"JRR Tolkien"* then it will generate this:
+
+------
+
+Thanks for reading **The Hobbit** by *JRR Tolkien*.
+
+------
+
+This means you can re-use content across multiple books, relying on the text subsitution to update that content based on the current book's metadata. Or you can refer to the author/title/series/whatever at any point within the book without worrying about consistent spellings for example.
 
 ## Adding Images
 
@@ -183,7 +202,36 @@ In addition to add images in the metadata , you can also:
   epub.addImagesAll([image1, image2, ...])
   ```
 
-The image here is the same as in the metadata. 
+The image will be different on browser and node. 
+
+### In Browser
+
+Image is an object that has two properties: 
+
+- `name`: file name with extension.
+- `data`: *Blob/File* or *base64 DataURI*.
+
+```js
+epub.addImage({
+    name:'1.jpg',
+    data: 'Blob/File or base64 DataURI'
+})
+```
+
+### In Nodejs
+
+```js
+epub.addImage('D:/epub/images/abc.jpg');
+```
+
+If you want to rename the image in epub, it can also be an object:
+
+```js
+epub.addImage({
+    name: '1.jpg',
+    path: 'D:/epub/images/abc.jpg'
+})
+```
 
 ## Adding Sections
 

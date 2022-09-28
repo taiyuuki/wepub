@@ -36,7 +36,7 @@ export type ImageFile = {
   data: FileDate;
 };
 
-export type ImagePath = string;
+export type ImagePath = string | { name: string; path: string };
 
 export type EpubImage = ImageFile | ImagePath;
 

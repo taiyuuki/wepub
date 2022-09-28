@@ -33,7 +33,7 @@ export default class Wepub {
   _generateContentsCallback: ContentsGenerate | undefined;
   constructor(metadata?: Metadata) {
     this.metadata = {} as Metadata;
-    this.coverImage = {} as ImageFile;
+    this.coverImage = {} as EpubImage;
     this.showContents = true;
     this.sections = [];
     this.css = "";
@@ -71,21 +71,24 @@ export default class Wepub {
     Object.assign(this.metadata, metadata);
     this.showContents = metadata.showContents ?? true;
     if (metadata.cover) {
-      this.addCover(metadata.cover);
+      this.addCover(metadata.cover as ImagePath);
     }
     if (metadata.images) {
       this.addImagesAll(metadata.images as ImagePath[]);
     }
   }
 
-  addCover(cover: EpubImage) {
+  addCover(cover: ImagePath) {
     if (typeof cover === "string") {
       this.coverImage = {
         name: getImageFileName(cover),
         data: cover,
       };
     } else {
-      this.coverImage = cover;
+      this.coverImage = {
+        name: cover.name,
+        data: cover.path,
+      };
     }
   }
 
@@ -94,10 +97,17 @@ export default class Wepub {
   }
 
   addImage(image: ImagePath) {
-    this.images.push({
-      name: getFileName(image),
-      data: image,
-    });
+    if (typeof image === "string") {
+      this.images.push({
+        name: getFileName(image),
+        data: image,
+      });
+    } else {
+      this.images.push({
+        name: image.name,
+        data: image.path,
+      });
+    }
   }
 
   addImagesAll(images: ImagePath[]) {
