@@ -1,39 +1,39 @@
-import Epub from "../src/index";
-import { describe, it, expect } from "vitest";
-import { genUuid, getImageFileName } from "src/utility";
+import Epub from '../src/index'
+import { describe, it, expect } from 'vitest'
+import { genUuid, getImageFileName } from 'src/utility'
 
-describe("metadata", () => {
-  it("generate uuid", () => {
+describe('metadata', () => {
+  it('generate uuid', () => {
     expect(
       /[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}/.test(
         genUuid()
       )
-    ).toMatchInlineSnapshot('true');
-  });
+    ).toMatchInlineSnapshot('true')
+  })
 
-  it("get image name", () => {
-    const image1 = "C:/images/cover.jpg";
+  it('get image name', () => {
+    const image1 = 'C:/images/cover.jpg'
     const image2 = {
-      name: "D:/images/132.jpg",
+      name: 'D:/images/132.jpg',
       data: {} as File,
-    };
-    expect(getImageFileName(image1)).toMatchInlineSnapshot('"cover.jpg"');
-    expect(getImageFileName(image2)).toMatchInlineSnapshot('"132.jpg"');
-  });
+    }
+    expect(getImageFileName(image1)).toMatchInlineSnapshot('"cover.jpg"')
+    expect(getImageFileName(image2)).toMatchInlineSnapshot('"132.jpg"')
+  })
 
   const epub = new Epub({
-    title: "test",
+    title: 'test',
     id: 1001,
-    cover: "C:/A/B/C.jpg",
-    author: "wepub",
-  });
-  it("init", () => {
+    cover: 'C:/A/B/C.jpg',
+    author: 'wepub',
+  })
+  it('init', () => {
     expect(epub.coverImage).toMatchInlineSnapshot(`
       {
         "data": "C:/A/B/C.jpg",
         "name": "C.jpg",
       }
-    `);
+    `)
     expect(epub.metadata).toMatchInlineSnapshot(`
       {
         "author": "wepub",
@@ -41,25 +41,25 @@ describe("metadata", () => {
         "id": 1001,
         "title": "test",
       }
-    `);
-  });
+    `)
+  })
 
-  it("set metadatea", () => {
+  it('set metadatea', () => {
     epub.setMeta({
-      title: "test2",
+      title: 'test2',
       id: 2002,
       cover: {
-        name: "D:/images/123.png",
+        name: 'D:/images/123.png',
         data: {} as File,
       },
-      author: "wepub",
-    });
+      author: 'wepub',
+    })
     expect(epub.coverImage).toMatchInlineSnapshot(`
       {
-        "data": {},
+        "data": undefined,
         "name": "D:/images/123.png",
       }
-    `);
+    `)
     expect(epub.metadata).toMatchInlineSnapshot(`
       {
         "author": "wepub",
@@ -70,15 +70,15 @@ describe("metadata", () => {
         "id": 2002,
         "title": "test2",
       }
-    `);
-  });
+    `)
+  })
 
-  it("add images", () => {
+  it('add images', () => {
     epub.addImagesAll([
-      "C:/images/1.jpg",
-      "C:/images/2.jpg",
-      "C:/images/3.jpg",
-    ]);
+      'C:/images/1.jpg',
+      'C:/images/2.jpg',
+      'C:/images/3.jpg',
+    ])
     expect(epub.images).toMatchInlineSnapshot(`
       [
         {
@@ -94,6 +94,6 @@ describe("metadata", () => {
           "name": "3.jpg",
         },
       ]
-    `);
-  });
-});
+    `)
+  })
+})

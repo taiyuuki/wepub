@@ -1,30 +1,30 @@
-import Epub from "../src/index";
-import { describe, it, expect } from "vitest";
-import { getFilesForEPUB } from "../src/constituents/subfile";
+import Epub from '../src/index'
+import { describe, it, expect } from 'vitest'
+import { getFilesForEPUB } from '../src/constituents/subfile'
 
-describe("sections", () => {
+describe('sections', () => {
   const epub = new Epub({
-    title: "test",
+    title: 'test',
     id: 1001,
-    cover: "C:/A/B/C.jpg",
-    author: "wepub",
-  });
+    cover: 'C:/A/B/C.jpg',
+    author: 'wepub',
+  })
   epub.addSection({
-    title: "prologue",
-    content: "<h1>prologue</h1><p>...</p>",
+    title: 'prologue',
+    content: '<h1>prologue</h1><p>...</p>',
     isFrontMatter: true,
-    overrideFilename: "prologue",
-  });
+    overrideFilename: 'prologue',
+  })
   epub.addSection({
-    title: "Chapter One",
-    content: "<h1>Chapter One</h1><p>...</p>",
-    overrideFilename: "chapter-01",
-  });
+    title: 'Chapter One',
+    content: '<h1>Chapter One</h1><p>...</p>',
+    overrideFilename: 'chapter-01',
+  })
   epub.addSection({
-    title: "Chapter Two",
-    content: "<h1>Chapter Two</h1><p>...</p>",
-  });
-  it("add sections", () => {
+    title: 'Chapter Two',
+    content: '<h1>Chapter Two</h1><p>...</p>',
+  })
+  it('add sections', () => {
     expect(epub.sections).toMatchInlineSnapshot(`
       [
         {
@@ -49,7 +49,7 @@ describe("sections", () => {
           "title": "Chapter Two",
         },
       ]
-    `);
+    `)
     expect(getFilesForEPUB(epub)).toMatchInlineSnapshot(`
       [
         {
@@ -83,7 +83,7 @@ describe("sections", () => {
           <dc:coverage></dc:coverage>
           <dc:source>undefined</dc:source>
           <dc:date opf:event='publication'>undefined</dc:date>
-          <dc:date opf:event='modification'>2022-09-25</dc:date>
+          <dc:date opf:event='modification'>2022-11-18</dc:date>
           <dc:rights>undefined</dc:rights>
           <meta name='cover' content='cover-image'/>
         </metadata>
@@ -265,6 +265,6 @@ describe("sections", () => {
           "name": "C.jpg",
         },
       ]
-    `);
-  });
-});
+    `)
+  })
+})

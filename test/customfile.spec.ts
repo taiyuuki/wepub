@@ -1,22 +1,22 @@
-import { describe, it, expect } from "vitest";
-import structuralFiles from "../src/constituents/structural";
-import Epub from "../src/index";
-import { getFilesForEPUB } from "../src/constituents/subfile";
+import { describe, it, expect } from 'vitest'
+import structuralFiles from '../src/constituents/structural'
+import Epub from '../src/index'
+import { getFilesForEPUB } from '../src/constituents/subfile'
 
-describe("sub file", () => {
+describe('sub file', () => {
   const epub = new Epub({
-    title: "test",
+    title: 'test',
     id: 1001,
-    cover: "C:/A/B/C.jpg",
-    author: "wepub",
-  });
+    cover: 'C:/A/B/C.jpg',
+    author: 'wepub',
+  })
   epub.addCustomFile({
-    name: "duokan-extension.xml",
-    folder: "META-INF",
+    name: 'duokan-extension.xml',
+    folder: 'META-INF',
     compress: true,
     content: structuralFiles.getDuokanExtension(),
-  });
-  it("add sub file", () => {
+  })
+  it('add sub file', () => {
     expect(getFilesForEPUB(epub)).toMatchInlineSnapshot(`
       [
         {
@@ -64,7 +64,7 @@ describe("sub file", () => {
           <dc:coverage></dc:coverage>
           <dc:source>undefined</dc:source>
           <dc:date opf:event='publication'>undefined</dc:date>
-          <dc:date opf:event='modification'>2022-09-25</dc:date>
+          <dc:date opf:event='modification'>2022-11-18</dc:date>
           <dc:rights>undefined</dc:rights>
           <meta name='cover' content='cover-image'/>
         </metadata>
@@ -168,6 +168,6 @@ describe("sub file", () => {
           "name": "C.jpg",
         },
       ]
-    `);
-  });
-});
+    `)
+  })
+})
